@@ -15,4 +15,4 @@ RUN bundle install
 
 COPY . /usr/app
 
-ENTRYPOINT ["ruby", "job.rb"]
+ENTRYPOINT ["ruby", "app.rb"]

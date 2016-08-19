@@ -22,7 +22,7 @@ require 'trello'
 # "Start date confirm!", "550fdd79c5491f754d74a7eb"
 
 module Rtr # stands for Recrutiment Trello Ruby
-  def initialize
+  def initialize_trello
     Trello.configure do |config|
       config.developer_public_key = ENV['BGP_REC_TRELLO_KEY']
       config.member_token = ENV['BGP_REC_TRELLO_TOKEN']
@@ -32,22 +32,80 @@ module Rtr # stands for Recrutiment Trello Ruby
   def retrieve_idlers
     list = Trello::List.find("57874e92aaa63c769caa61ca")
 
-    idling_more_than_a_week = []
-    idling_more_than_a_day = []
+    @week_idlers = []
+    @day_idlers = []
 
     list.cards.each do |c|
       time_diff = Time.now - c.last_activity_date
+      card_info = { name: c.name, last_activity_date: c.last_activity_date }
 
       if (time_diff / 1.week).floor >= 1
-        idling_more_than_a_week.push({ name: c.name })
+        @week_idlers.push(card_info)
       elsif (time_diff / 1.day).floor >= 1
-        idling_more_than_a_day.push({ name: c.name })
+        @day_idlers.push(card_info)
       end
     end
 
-    {
-      idling_more_than_a_week: idling_more_than_a_week,
-      idling_more_than_a_day: idling_more_than_a_day
-    }
+    @to_message_case = 'retrieve_idlers'
+    self
+  end
+
+  # Base @to_message_case, formats the message to be readable
+  def to_message
+    message = ''
+
+    case @to_message_case
+    when 'retrieve_idlers'
+      if @week_idlers.length == 0  && @day_idlers.length == 0
+        message += "There are no idlers."
+      else
+        unless @week_idlers.empty?
+          message += "There are #{@week_idlers.length} idling for at least a week: \n"
+          @week_idlers.each do |i|
+            message += idler_line_message(i)
+          end
+        end
+
+        unless @day_idlers.empty?
+          message += "\nThere are #{@day_idlers.length} idling for at least a day:\n"
+          @day_idlers.each do |i|
+            message += idler_line_message(i)
+          end
+        end
+      end
+    end
+
+    message
+  end
+
+  private
+  def time_ago_in_words(t1, t2)
+    s = t1.to_i - t2.to_i # distance between t1 and t2 in seconds
+
+    resolution = if s > 29030400
+      [(s/29030400), 'years']
+    elsif s > 2419200
+      [(s/2419200), 'months']
+    elsif s > 604800
+      [(s/604800), 'weeks']
+    elsif s > 86400
+      [(s/86400), 'days']
+    elsif s > 3600
+      [(s/3600), 'hours']
+    elsif s > 60
+      [(s/60), 'minutes']
+    else
+      [s, 'seconds']
+    end
+
+    if resolution[0] == 1
+      resolution.join(' ')[0...-1]
+    else
+      resolution.join(' ')
+    end
+  end
+
+  def idler_line_message(i)
+    "- #{i[:name]}, #{time_ago_in_words(Time.now, i[:last_activity_date])} ago\n"
   end
 end

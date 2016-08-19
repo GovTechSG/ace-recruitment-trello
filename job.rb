@@ -1,18 +1,28 @@
 require_relative 'rtr'
+require_relative 'telegram_bot'
 
 class Job
-  attr_reader :week_idlers, :day_idlers
   include Rtr
+  include TelegramBot
 
-  def update
-    idlers = retrieve_idlers
-    @week_idlers = idlers[:idling_more_than_a_week]
-    @day_idlers = idlers[:idling_more_than_a_day]
+  def initialize
+    initialize_trello
+    initialize_telegram_bot
+  end
+
+  def retrieve_idlers
+    super
+  end
+
+  def to_message
+    super
+  end
+
+  def send(message, recipient)
+    super(message, recipient)
+  end
+
+  def recipients
+    @recipients
   end
 end
-
-job = Job.new
-job.update
-
-p job.week_idlers
-p job.day_idlers
