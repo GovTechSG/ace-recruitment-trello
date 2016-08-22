@@ -3,3 +3,5 @@ services:
   rec-ruby:
     build: .
     env_file: docker_env
+    environment:
+     TZ: "Asia/Singapore"
