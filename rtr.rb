@@ -37,7 +37,7 @@ module Rtr # stands for Recrutiment Trello Ruby
 
     list.cards.each do |c|
       time_diff = Time.now - c.last_activity_date
-      card_info = { name: c.name, last_activity_date: c.last_activity_date }
+      card_info = { name: c.name, last_activity_date: c.last_activity_date, url: c.url }
 
       if (time_diff / 1.week).floor >= 1
         @week_idlers.push(card_info)
@@ -106,6 +106,6 @@ module Rtr # stands for Recrutiment Trello Ruby
   end
 
   def idler_line_message(i)
-    "- #{i[:name]}, #{time_ago_in_words(Time.now, i[:last_activity_date])} ago\n"
+    "- #{i[:name]}, #{time_ago_in_words(Time.now, i[:last_activity_date])} ago - #{i[:url]}\n"
   end
 end
