@@ -106,6 +106,6 @@ module Rtr # stands for Recrutiment Trello Ruby
   end
 
   def idler_line_message(i)
-    "- #{i[:name]}, #{time_ago_in_words(Time.now, i[:last_activity_date])} ago\n"
+    "- #{i[:name]}, #{time_ago_in_words(Time.now, i[:last_activity_date])} ago - #{i[:url]}\n"
   end
 end
