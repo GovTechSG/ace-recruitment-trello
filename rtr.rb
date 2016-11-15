@@ -10,12 +10,14 @@ module Rtr # stands for Recrutiment Trello Ruby
 
   def retrieve_idlers
     list_ids = ENV['TRELLO_LIST_IDS'].split('|')
+    card_exceptions = ENV['CARD_EXCEPTIONS'].split('|')
 
     @week_idlers = []
     list_ids.each do |list_id|
       list = Trello::List.find(list_id)
 
       list.cards.each do |c|
+        next if card_exceptions.include? c.id
         time_diff = Time.now - c.last_activity_date
         card_info = {
           name: c.name,
@@ -41,8 +43,8 @@ module Rtr # stands for Recrutiment Trello Ruby
 
     case @to_message_case
     when 'retrieve_idlers'
-      if @week_idlers.length == 0
-        message += "There are no idlers."
+      if @week_idlers.empty?
+        message += 'There are no idlers.'
       else
         unless @week_idlers.empty?
           message += "There are #{@week_idlers.length} idling for at least a week: \n"
@@ -57,6 +59,7 @@ module Rtr # stands for Recrutiment Trello Ruby
   end
 
   private
+
   def time_ago_in_words(t1, t2)
     s = t1.to_i - t2.to_i # distance between t1 and t2 in seconds
 
@@ -88,6 +91,8 @@ module Rtr # stands for Recrutiment Trello Ruby
   end
 
   def idler_line_message(i)
-    "#{emoji(Time.now, i[:last_activity_date])} #{i[:name]}(#{i[:list_name]}), #{time_ago_in_words(Time.now, i[:last_activity_date])} ago\n↳ #{i[:url]}\n\n"
+    "#{emoji(Time.now, i[:last_activity_date])} " \
+    "#{i[:name]}(#{i[:list_name]}), " \
+    "#{time_ago_in_words(Time.now, i[:last_activity_date])} ago\n↳ #{i[:url]}\n\n"
   end
 end
