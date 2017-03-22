@@ -12,10 +12,8 @@ module Rtr # stands for Recrutiment Trello Ruby
     board_id = ENV['BOARD_ID']
     list_exceptions = ENV['LIST_EXCEPTIONS'].split('|')
     card_exceptions = ENV['CARD_EXCEPTIONS'].split('|')
-    board = Trello::Board.find(board_id)
-    new_lists = board.lists
     @week_idlers = []
-    new_lists.each do |list|
+    Trello::Board.find(board_id).lists.each do |list|
       next if list_exceptions.include? list.id
       list.cards.each do |c|
         next if card_exceptions.include? c.id
