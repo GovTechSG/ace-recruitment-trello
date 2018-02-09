@@ -8,7 +8,7 @@ module TelegramBot
 
   def send(message, recipient)
     Telegram::Bot::Client.run(@token) do |bot|
-      bot.api.send_message(chat_id: recipient, text: message)
+      bot.api.send_message(chat_id: recipient, text: message, parse_mode: 'markdown')
       break
     end
   end
