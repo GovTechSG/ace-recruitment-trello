@@ -56,7 +56,6 @@ You can get the card_id for those card `CARD_EXCEPTIONS` by submitting a GET req
 https://api.trello.com/1/boards/{board_id_without_{}}/cards?key={your_key_without_{}}&token={your_token_without_{}}
 ```
 
-
 #### Extending
 
 There are 4 main files.
