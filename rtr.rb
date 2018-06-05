@@ -10,13 +10,13 @@ module Rtr # stands for Recrutiment Trello Ruby
 
   def retrieve_idlers
     board_id = ENV['BOARD_ID']
-    list_exceptions = ENV['LIST_EXCEPTIONS'].split('|')
-    card_exceptions = ENV['CARD_EXCEPTIONS'].split('|')
+    list_exceptions = ENV['LIST_EXCEPTIONS']&.split('|')
+    card_exceptions = ENV['CARD_EXCEPTIONS']&.split('|')
     @week_idlers = []
     Trello::Board.find(board_id).lists.each do |list|
-      next if list_exceptions.include? list.id
+      next if list_exceptions&.include? list.id
       list.cards.each do |c|
-        next if card_exceptions.include? c.id
+        next if card_exceptions&.include? c.id
         time_diff = Time.now - c.last_activity_date
         card_info = {
           name: c.name,
