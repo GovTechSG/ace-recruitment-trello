@@ -34,7 +34,7 @@ BGP_REC_RECIPIENTS=7235478283|7235478281|7235478280
 ```
 
 You can add the list_id of any list that you do not wish to monitor in the `LIST_EXCEPTIONS` split by '|'.
-Adding multiple recipients looks like this:
+Adding multiple list_id looks like this:
 ```
 LIST_EXCEPTIONS=58753825c4e037866aebd303|58753825c4e037866aebd302
 ```
@@ -46,7 +46,7 @@ https://api.trello.com/1/boards/{board_id_without_{}}/lists?key={your_key_withou
 ```
 
 You can add the card_id of any card that you do not wish to monitor in the `CARD_EXCEPTIONS` split by '|'.
-Adding multiple recipients looks like this:
+Adding multiple card_id looks like this:
 ```
 card_EXCEPTIONS=58753825c4e037866aebd303|58753825c4e037866aebd302
 ```
