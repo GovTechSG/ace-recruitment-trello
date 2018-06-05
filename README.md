@@ -11,7 +11,9 @@ BGP_REC_TRELLO_KEY=[key_without_[]]
 BGP_REC_TRELLO_TOKEN=[key_without_[]]
 BGP_REC_TELEGRAM_TOKEN=[key_without_[]]
 BGP_REC_RECIPIENTS=[key_without_[]]
-
+BOARD_ID=board_id
+LIST_EXCEPTIONS=[list_id_without_[]]
+CARD_EXCEPTIONS=[card_id_without_[]]
 ```
 
 Make sure you have `docker` and `docker-compose` installed.
@@ -30,6 +32,30 @@ you need to get your group's chat id and add it to `BGP_REC_RECIPIENTS`.
 ```
 BGP_REC_RECIPIENTS=7235478283|7235478281|7235478280
 ```
+
+You can add the list_id of any list that you do not wish to monitor in the `LIST_EXCEPTIONS` split by '|'.
+Adding multiple recipients looks like this:
+```
+LIST_EXCEPTIONS=58753825c4e037866aebd303|58753825c4e037866aebd302
+```
+You can just leave it empty if there is no list_id to add, example `LIST_EXCEPTIONS=''`
+
+To get the list_id simply submit a GET request using postman with the following query:
+```
+https://api.trello.com/1/boards/{board_id_without_{}}/lists?key={your_key_without_{}}&token={your_token_without_{}}
+```
+
+You can add the card_id of any card that you do not wish to monitor in the `CARD_EXCEPTIONS` split by '|'.
+Adding multiple recipients looks like this:
+```
+card_EXCEPTIONS=58753825c4e037866aebd303|58753825c4e037866aebd302
+```
+You can just leave it empty if there is no card_id to add, example `CARD_EXCEPTIONS=''`
+You can get the card_id for those card `CARD_EXCEPTIONS` by submitting a GET request using postman with the following query
+```
+https://api.trello.com/1/boards/{board_id_without_{}}/cards?key={your_key_without_{}}&token={your_token_without_{}}
+```
+
 
 #### Extending
 
